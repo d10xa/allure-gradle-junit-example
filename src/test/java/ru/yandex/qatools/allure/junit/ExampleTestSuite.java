@@ -8,7 +8,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Description("This is an example test suite")
-public class ExampleTestSuite extends BaseTest {
+public class ExampleTestSuite {
 
     @Title("Failing test")
     @Test
