@@ -5,8 +5,7 @@ repositories {
 def allureVersion = '1.4.23'
 
 dependencies {
-    compile "ru.yandex.qatools.allure:allure-junit-adaptor:${allureVersion}"
     compile "ru.yandex.qatools.allure:allure-java-adaptor-api:${allureVersion}"
     compile "ru.yandex.qatools.allure:allure-core:${allureVersion}"
-    compile "ru.yandex.qatools.allure:allure-bundle:${allureVersion}"
+    compile "junit:junit:4.12"
 }

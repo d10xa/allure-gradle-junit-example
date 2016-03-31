@@ -10,24 +10,8 @@ repositories {
 
 configurations {
     agent
-    allurebuildscript
+    allureBuildScript
 }
-
-task createClasspathManifest {
-    def outputDir = file("$buildDir/$name")
-
-    inputs.files sourceSets.main.runtimeClasspath
-    outputs.dir outputDir
-
-    doLast {
-        outputDir.mkdirs()
-        file("$outputDir/classpath.txt").text = configurations
-                .getByName('allurebuildscript')
-                .files.collect {it.absolutePath}
-                .join(String.format("%n"))//sourceSets.main.runtimeClasspath.join("\n")
-    }
-}
-
 
 dependencies {
     agent "org.aspectj:aspectjweaver:${aspectjVersion}"
@@ -36,28 +20,19 @@ dependencies {
     compile "ru.yandex.qatools.allure:allure-core:${allureVersion}"
     compile "ru.yandex.qatools.allure:allure-bundle:${allureVersion}"
 
-    allurebuildscript "ru.yandex.qatools.allure:allure-java-adaptor-api:${allureVersion}"
-    allurebuildscript "ru.yandex.qatools.allure:allure-core:${allureVersion}"
-    allurebuildscript "ru.yandex.qatools.allure:allure-bundle:${allureVersion}"
-    testRuntime files(createClasspathManifest)
-}
-
-test {
-    useJUnit()
+    allureBuildScript "ru.yandex.qatools.allure:allure-java-adaptor-api:${allureVersion}"
+    allureBuildScript "ru.yandex.qatools.allure:allure-core:${allureVersion}"
+    allureBuildScript "ru.yandex.qatools.allure:allure-bundle:${allureVersion}"
 }
 
 test.doFirst {
     jvmArgs "-javaagent:${configurations.agent.singleFile}"
 }
 
-def listener = new AllureTestListener([file(sourceSets.test.output.classesDir)])
-
 test {
-//    addTestOutputListener()
-
-    addTestListener(listener)
+    addTestListener(new AllureTestListener(getClasspath()))
 }
 
-task x << {
-    println sourceSets.test.output.classesDir
-}
+// AllureTestListener and test task work in separate JVM's
+// Gradle's JVM use allure API and property should be here.
+System.setProperty("allure.results.directory", "$buildDir/allure-results")

@@ -1,6 +1,7 @@
 package ru.yandex.qatools.allure.junit;
 
 import org.junit.Test;
+import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Title;
 
@@ -13,6 +14,7 @@ public class ExampleTestSuite {
     @Title("Failing test")
     @Test
     public void failingTest() {
+        text();
         assertThat(1, equalTo(2));
     }
 
@@ -20,5 +22,10 @@ public class ExampleTestSuite {
     @Test
     public void successfulTest() {
         assertThat(2, equalTo(2));
+    }
+
+    @Attachment(value = "attachment.txt", type = "text")
+    public String text() {
+        return "hello";
     }
 }
